@@ -18,6 +18,7 @@
 <resources>
 
     <style name="Theme.Bacon" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@android:color/holo_orange_dark</item>
 
     </style>
 
