@@ -1,5 +1,7 @@
 package com.example.xyzreader.ui;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,7 +13,13 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.transition.Scene;
+import android.support.transition.TransitionManager;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +35,10 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +51,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.StringTokenizer;
 
 /**
  * An activity representing a list of Articles. This activity has different presentations for
@@ -72,48 +84,62 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_list);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        imageView = (ImageView) findViewById(R.id.toolbarshort);
 
         columnCount = getResources().getInteger(R.integer.list_column_count);
-        sglm = new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager = new LinearLayoutManager(ArticleListActivity.this);
 
         final View toolbarContainerView = findViewById(R.id.toolbar_container);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView.setLayoutManager(sglm);
+
+
         getLoaderManager().initLoader(0, null, this);
 
         if (savedInstanceState == null) {
             refresh();
         }
 
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        imageView = (ImageView)toolbarContainerView.findViewById(R.id.toolbarshort);
 
-                RecyclerView.LayoutManager manager = mRecyclerView.getLayoutManager();
 
-                if(getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
+//
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//
+//
+////                RecyclerView.LayoutManager manager = mRecyclerView.getLayoutManager();
+////
+////                if(getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
+////
+////                    if (manager instanceof StaggeredGridLayoutManager) {
+////                        imageView.setImageResource(R.drawable.ic_view_list_black_24dp);
+////                        mRecyclerView.setLayoutManager(layoutManager);
+////
+////                    } else {
+////                        imageView.setImageResource(R.drawable.ic_dashboard_black_24dp);
+////                        mRecyclerView.setLayoutManager(sglm);
+////
+////                    }
+////                }
+//
+//                Log.e("DONE","DONE");
+//            }
+//        });
 
-                    if (manager instanceof StaggeredGridLayoutManager) {
-                        imageView.setImageResource(R.drawable.ic_view_list_black_24dp);
-                        mRecyclerView.setLayoutManager(layoutManager);
-
-                    } else {
-                        imageView.setImageResource(R.drawable.ic_dashboard_black_24dp);
-                        mRecyclerView.setLayoutManager(sglm);
-
-                    }
-                }
-            }
-        });
     }
+
 
     private void refresh() {
         startService(new Intent(this, UpdaterService.class));
@@ -160,19 +186,58 @@ public class ArticleListActivity extends AppCompatActivity implements
         mRecyclerView.setAdapter(adapter);
 
 
-        int columnCount = getResources().getInteger(R.integer.list_column_count);
 
-        StaggeredGridLayoutManager sglm = new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
+        sglm = new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager = new LinearLayoutManager(ArticleListActivity.this,LinearLayoutManager.VERTICAL,true);
 
         mRecyclerView.setLayoutManager(sglm);
 
+//        imageView = (ImageView)findViewById(R.id.toolbarshort);
+
+
 
     }
+
+    public void run(View view) {
+
+        Log.e("Done","Done");
+
+    }
+
+    public void run2(View view) {
+
+        RecyclerView.LayoutManager manager = mRecyclerView.getLayoutManager();
+
+        if(getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
+
+//            mRecyclerView.scrollToPosition(1);
+
+
+
+            mRecyclerView.scrollToPosition(mRecyclerView.getVerticalScrollbarPosition());
+
+            if (manager instanceof StaggeredGridLayoutManager) {
+                imageView.setImageResource(R.drawable.ic_view_list_black_24dp);
+                mRecyclerView.setLayoutManager(layoutManager);
+
+            } else {
+                imageView.setImageResource(R.drawable.ic_dashboard_black_24dp);
+                mRecyclerView.setLayoutManager(sglm);
+
+            }
+        }
+    }
+
+
+
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mRecyclerView.setAdapter(null);
     }
+
+
+
 
     private class Adapter extends RecyclerView.Adapter<ViewHolder> {
         private Cursor mCursor;
@@ -188,14 +253,32 @@ public class ArticleListActivity extends AppCompatActivity implements
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
             View view = getLayoutInflater().inflate(R.layout.list_item_article, parent, false);
             final ViewHolder vh = new ViewHolder(view);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))));
+
+
+                    /************************** for animation ********************************************************************/
+
+//                    DynamicHeightNetworkImageView dynamicHeightNetworkImageView = (DynamicHeightNetworkImageView)findViewById(R.id.thumbnail);
+//
+//
+//
+//                    ActivityOptions options = null;
+//
+//                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+//                        options = ActivityOptions.makeSceneTransitionAnimation(ArticleListActivity.this,dynamicHeightNetworkImageView,"shared_element");
+//                    }
+//
+//                    startActivity(new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))),options.toBundle());
+
+                    /******************************************************************************************************************/
+
+                    startActivity(new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))));
+
                 }
             });
             return vh;
@@ -243,6 +326,8 @@ public class ArticleListActivity extends AppCompatActivity implements
             return mCursor.getCount();
         }
     }
+
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public DynamicHeightNetworkImageView thumbnailView;

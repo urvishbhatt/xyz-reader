@@ -22,6 +22,7 @@ import android.support.v4.app.ShareCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.Spanned;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -29,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -72,6 +74,9 @@ public class ArticleDetailFragment extends Fragment implements
     Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbar;
 
+    private ProgressBar progressBar;
+
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -91,6 +96,8 @@ public class ArticleDetailFragment extends Fragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             mItemId = getArguments().getLong(ARG_ITEM_ID);
@@ -120,6 +127,7 @@ public class ArticleDetailFragment extends Fragment implements
             Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
 
+        progressBar = (ProgressBar)mRootView.findViewById(R.id.progressBar);
         toolbar = (Toolbar)mRootView.findViewById(R.id.toolbartop);
         collapsingToolbar = (CollapsingToolbarLayout)mRootView.findViewById(R.id.photo_container);
 
@@ -228,6 +236,7 @@ public class ArticleDetailFragment extends Fragment implements
             collapsingToolbar.setTitle(mCursor.getString(ArticleLoader.Query.TITLE));
 
             Date publishedDate = parsePublishedDate();
+
             if (!publishedDate.before(START_OF_EPOCH.getTime())) {
 //                bylineView.setText(Html.fromHtml(
 //                        DateUtils.getRelativeTimeSpanString(
@@ -245,6 +254,14 @@ public class ArticleDetailFragment extends Fragment implements
 //                                + "</font>"));
 
             }
+
+
+//            String text = mCursor.getString(ArticleLoader.Query.BODY);
+//            text = text.trim().replaceAll("\\s{3,}", " ");
+//
+//            bodyView.setText(text);
+
+
             bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
 
             ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
@@ -265,6 +282,9 @@ public class ArticleDetailFragment extends Fragment implements
 
                         }
                     });
+
+            progressBar.setVisibility(View.GONE);
+
         } else {
 //            mRootView.setVisibility(View.GONE);
 //            titleView.setText("N/A");
