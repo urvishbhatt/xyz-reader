@@ -200,12 +200,6 @@ public class ArticleListActivity extends AppCompatActivity implements
 
     public void run(View view) {
 
-        Log.e("Done","Done");
-
-    }
-
-    public void run2(View view) {
-
         RecyclerView.LayoutManager manager = mRecyclerView.getLayoutManager();
 
         if(getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
@@ -226,8 +220,8 @@ public class ArticleListActivity extends AppCompatActivity implements
 
             }
         }
-    }
 
+    }
 
 
 

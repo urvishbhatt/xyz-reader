@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -74,9 +75,13 @@ public class ArticleDetailFragment extends Fragment implements
     Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbar;
 
+
+    Bitmap bitmap;
+    CharSequence text;
+
     private ProgressBar progressBar;
 
-
+    private  TextView bodyView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -97,14 +102,12 @@ public class ArticleDetailFragment extends Fragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             mItemId = getArguments().getLong(ARG_ITEM_ID);
         }
 
         mIsCard = getResources().getBoolean(R.bool.detail_is_card);
-//        mStatusBarFullOpacityBottom = getResources().getDimensionPixelSize(R.dimen.detail_card_top_margin);
+
         setHasOptionsMenu(true);
     }
 
@@ -128,7 +131,7 @@ public class ArticleDetailFragment extends Fragment implements
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
 
         progressBar = (ProgressBar)mRootView.findViewById(R.id.progressBar);
-        toolbar = (Toolbar)mRootView.findViewById(R.id.toolbartop);
+//        toolbar = (Toolbar)mRootView.findViewById(R.id.toolbartop);
         collapsingToolbar = (CollapsingToolbarLayout)mRootView.findViewById(R.id.photo_container);
 
 //        mDrawInsetsFrameLayout = (DrawInsetsFrameLayout)
@@ -163,6 +166,8 @@ public class ArticleDetailFragment extends Fragment implements
                         .setType("text/plain")
                         .setText("Some sample text")
                         .getIntent(), getString(R.string.action_share)));
+
+                Log.e("Done","Done");
             }
         });
 
@@ -221,10 +226,10 @@ public class ArticleDetailFragment extends Fragment implements
         TextView titleView = (TextView) mRootView.findViewById(R.id.article_title);
 //        TextView bylineView = (TextView) mRootView.findViewById(R.id.article_byline);
 //        bylineView.setMovementMethod(new LinkMovementMethod());
-        TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
+        bodyView = (TextView) mRootView.findViewById(R.id.article_body);
 
 
-        bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
+        bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Bookerly-Regular.ttf"));
 
         if (mCursor != null) {
             mRootView.setAlpha(0);
@@ -232,8 +237,15 @@ public class ArticleDetailFragment extends Fragment implements
             mRootView.animate().alpha(1);
 //            titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
 
-            toolbar.setTitle("DONE "+mCursor.getString(ArticleLoader.Query.TITLE));
+//            toolbar.setTitle("DONE "+mCursor.getString(ArticleLoader.Query.TITLE));
             collapsingToolbar.setTitle(mCursor.getString(ArticleLoader.Query.TITLE));
+
+
+            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+
+                collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
+
+            }
 
             Date publishedDate = parsePublishedDate();
 
@@ -268,7 +280,7 @@ public class ArticleDetailFragment extends Fragment implements
                     .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
                         @Override
                         public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
-                            Bitmap bitmap = imageContainer.getBitmap();
+                            bitmap = imageContainer.getBitmap();
                             if (bitmap != null) {
                                 Palette p = Palette.generate(bitmap, 12);
                                 mMutedColor = p.getDarkMutedColor(0xFF333333);
@@ -332,5 +344,16 @@ public class ArticleDetailFragment extends Fragment implements
         return mIsCard
                 ? (int) mPhotoContainerView.getTranslationY() + mPhotoView.getHeight() - mScrollY
                 : mPhotoView.getHeight() - mScrollY;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+//        text = bodyView.getText();
+//
+//        outState.putCharSequence("text",text);
+//        outState.putParcelable("bitmap",bitmap);
+
     }
 }

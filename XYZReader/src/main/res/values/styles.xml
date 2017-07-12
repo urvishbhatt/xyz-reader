@@ -24,5 +24,9 @@
 
     </style>
 
+    <style name="CollapsedAppBar" parent="@android:style/TextAppearance">
+        <item name="android:textSize">22sp</item>
+    </style>
+
 
 </resources>
