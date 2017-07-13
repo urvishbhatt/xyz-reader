@@ -20,8 +20,8 @@
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
         android:layout_height="90dp"
-        android:elevation="8dp"
-        android:background="@android:color/holo_orange_light"
+        android:elevation="4dp"
+        style="@style/AppBarPrimaryColor"
         android:fitsSystemWindows="true"
         android:gravity="center"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">

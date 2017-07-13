@@ -42,7 +42,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 android:layout_gravity="center_horizontal"
-                android:background="@color/theme_primary_dark" />
+                style="@style/ThemeTransparentColor"
+                android:elevation="4dp"/>
 
 
 
@@ -72,7 +73,8 @@
         android:elevation="2dp"
         android:maxWidth="@dimen/detail_card_max_width"
         android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        >
 
         <TextView
             android:id="@+id/article_body"
@@ -85,9 +87,11 @@
             android:paddingBottom="@dimen/detail_body_bottom_margin"
             android:paddingTop="@dimen/detail_body_top_margin"
             android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textColorLink="@color/theme_accent"
-            android:textSize="@dimen/detail_body_text_size" />
+            style="@style/ThemeStory"
+            android:textSize="@dimen/detail_body_text_size"
+            android:layout_gravity="center_horizontal"
+            android:foregroundGravity="center_horizontal"
+            />
 
     </android.support.v4.widget.NestedScrollView>
 

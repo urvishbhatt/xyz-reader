@@ -20,16 +20,19 @@ import java.util.GregorianCalendar;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -72,9 +75,9 @@ public class ArticleDetailFragment extends Fragment implements
     // Most time functions can only handle 1902 - 2037
     private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2,1,1);
 
-    Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbar;
 
+    int fabuttoclick = 0;
 
     Bitmap bitmap;
     CharSequence text;
@@ -111,9 +114,7 @@ public class ArticleDetailFragment extends Fragment implements
         setHasOptionsMenu(true);
     }
 
-    public ArticleDetailActivity getActivityCast() {
-        return (ArticleDetailActivity) getActivity();
-    }
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -131,50 +132,63 @@ public class ArticleDetailFragment extends Fragment implements
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
 
         progressBar = (ProgressBar)mRootView.findViewById(R.id.progressBar);
-//        toolbar = (Toolbar)mRootView.findViewById(R.id.toolbartop);
         collapsingToolbar = (CollapsingToolbarLayout)mRootView.findViewById(R.id.photo_container);
 
-//        mDrawInsetsFrameLayout = (DrawInsetsFrameLayout)
-//                mRootView.findViewById(R.id.draw_insets_frame_layout);
-//        mDrawInsetsFrameLayout.setOnInsetsCallback(new DrawInsetsFrameLayout.OnInsetsCallback() {
-//            @Override
-//            public void onInsetsChanged(Rect insets) {
-//                mTopInset = insets.top;
-//            }
-//        });
-
-//        mScrollView = (ObservableScrollView) mRootView.findViewById(R.id.scrollview);
-//        mScrollView.setCallbacks(new ObservableScrollView.Callbacks() {
-//            @Override
-//            public void onScrollChanged() {
-//                mScrollY = mScrollView.getScrollY();
-//                getActivityCast().onUpButtonFloorChanged(mItemId, ArticleDetailFragment.this);
-//                mPhotoContainerView.setTranslationY((int) (mScrollY - mScrollY / PARALLAX_FACTOR));
-//                updateStatusBar();
-//            }
-//        });
 
         mPhotoView = (ImageView) mRootView.findViewById(R.id.photo);
         mPhotoContainerView = mRootView.findViewById(R.id.photo_container);
 
         mStatusBarColorDrawable = new ColorDrawable(0);
 
+
+
         mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
-                        .setType("text/plain")
-                        .setText("Some sample text")
-                        .getIntent(), getString(R.string.action_share)));
 
-                Log.e("Done","Done");
+                fabuttoclick = fabuttoclick + 1;
+                final OvershootInterpolator interpolator = new OvershootInterpolator();
+
+
+                if ((fabuttoclick%2) == 0){
+
+
+                    ViewCompat.animate(mRootView.findViewById(R.id.share_fab)).
+                            rotation(360f).
+                            withLayer().
+                            setDuration(100).
+                            setInterpolator(interpolator).
+                            start();
+
+                    startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
+                            .setType("text/plain")
+                            .setText("Some sample text")
+                            .getIntent(), getString(R.string.action_share)));
+
+                    Log.e("Done","Done");
+
+                }else {
+
+                    ViewCompat.animate(mRootView.findViewById(R.id.share_fab)).
+                            rotation(-360f).
+                            withLayer().
+                            setDuration(100).
+                            setInterpolator(interpolator).
+                            start();
+
+                    startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
+                            .setType("text/plain")
+                            .setText("Some sample text")
+                            .getIntent(), getString(R.string.action_share)));
+
+                    Log.e("Done","Done");
+
+                }
             }
         });
 
-//        bindViews();
+
         updateStatusBar();
-
-
         return mRootView;
     }
 

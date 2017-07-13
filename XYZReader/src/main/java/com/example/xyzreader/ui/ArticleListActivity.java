@@ -36,6 +36,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -99,8 +104,18 @@ public class ArticleListActivity extends AppCompatActivity implements
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 
+
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSwipeRefreshLayout.setRefreshing(true);
+            }
+        });
+
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(sglm);
+
 
 
         getLoaderManager().initLoader(0, null, this);
@@ -110,33 +125,6 @@ public class ArticleListActivity extends AppCompatActivity implements
         }
 
         imageView = (ImageView)toolbarContainerView.findViewById(R.id.toolbarshort);
-
-
-//
-//        imageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//
-//
-////                RecyclerView.LayoutManager manager = mRecyclerView.getLayoutManager();
-////
-////                if(getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
-////
-////                    if (manager instanceof StaggeredGridLayoutManager) {
-////                        imageView.setImageResource(R.drawable.ic_view_list_black_24dp);
-////                        mRecyclerView.setLayoutManager(layoutManager);
-////
-////                    } else {
-////                        imageView.setImageResource(R.drawable.ic_dashboard_black_24dp);
-////                        mRecyclerView.setLayoutManager(sglm);
-////
-////                    }
-////                }
-//
-//                Log.e("DONE","DONE");
-//            }
-//        });
 
     }
 
@@ -188,24 +176,39 @@ public class ArticleListActivity extends AppCompatActivity implements
 
 
         sglm = new StaggeredGridLayoutManager(columnCount, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager = new LinearLayoutManager(ArticleListActivity.this,LinearLayoutManager.VERTICAL,true);
+        layoutManager = new LinearLayoutManager(ArticleListActivity.this,LinearLayoutManager.VERTICAL,false);
+
 
         mRecyclerView.setLayoutManager(sglm);
 
-//        imageView = (ImageView)findViewById(R.id.toolbarshort);
+
+        /**********animation****************/
+
+        AnimationSet set = new AnimationSet(true);
+
+        Animation animation = new AlphaAnimation(0.0f, 1.0f);
+        animation.setDuration(500);
+        set.addAnimation(animation);
+
+        animation = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, -1.0f, Animation.RELATIVE_TO_SELF, 0.0f
+        );
+        animation.setDuration(100);
+        set.addAnimation(animation);
+
+        LayoutAnimationController controller = new LayoutAnimationController(set, 0.5f);
+
+        mRecyclerView.setLayoutAnimation(controller);
 
 
+        /***************************************************/
 
     }
 
     public void run(View view) {
 
         RecyclerView.LayoutManager manager = mRecyclerView.getLayoutManager();
-
-        if(getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
-
-//            mRecyclerView.scrollToPosition(1);
-
 
 
             mRecyclerView.scrollToPosition(mRecyclerView.getVerticalScrollbarPosition());
@@ -219,7 +222,7 @@ public class ArticleListActivity extends AppCompatActivity implements
                 mRecyclerView.setLayoutManager(sglm);
 
             }
-        }
+
 
     }
 
@@ -272,6 +275,7 @@ public class ArticleListActivity extends AppCompatActivity implements
                     /******************************************************************************************************************/
 
                     startActivity(new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))));
+                    overridePendingTransition( R.anim.nextactivity, R.anim.nextactivityback );
 
                 }
             });
