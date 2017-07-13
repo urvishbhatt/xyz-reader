@@ -7,8 +7,6 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-
-
 <android.support.design.widget.CoordinatorLayout
     android:id="@+id/activity_article_list_id"
     android:layout_width="match_parent"
@@ -19,7 +17,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="@dimen/recyleviewappbar"
         android:elevation="4dp"
         style="@style/AppBarPrimaryColor"
         android:fitsSystemWindows="true"

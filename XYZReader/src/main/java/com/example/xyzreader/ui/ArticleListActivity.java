@@ -1,38 +1,23 @@
 package com.example.xyzreader.ui;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
+
 import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.Loader;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.transition.Scene;
-import android.support.transition.TransitionManager;
-import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.text.Layout;
 import android.text.format.DateUtils;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -41,11 +26,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
@@ -56,7 +38,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.StringTokenizer;
+
 
 /**
  * An activity representing a list of Articles. This activity has different presentations for
@@ -68,16 +50,16 @@ public class ArticleListActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = ArticleListActivity.class.toString();
-    private Toolbar mToolbar;
+
     private ImageView imageView;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
-    // Use default locale format
+
     private SimpleDateFormat outputFormat = new SimpleDateFormat();
-    // Most time functions can only handle 1902 - 2037
+
     private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2,1,1);
 
 
@@ -222,19 +204,12 @@ public class ArticleListActivity extends AppCompatActivity implements
                 mRecyclerView.setLayoutManager(sglm);
 
             }
-
-
     }
-
-
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mRecyclerView.setAdapter(null);
     }
-
-
-
 
     private class Adapter extends RecyclerView.Adapter<ViewHolder> {
         private Cursor mCursor;
@@ -256,23 +231,6 @@ public class ArticleListActivity extends AppCompatActivity implements
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-
-                    /************************** for animation ********************************************************************/
-
-//                    DynamicHeightNetworkImageView dynamicHeightNetworkImageView = (DynamicHeightNetworkImageView)findViewById(R.id.thumbnail);
-//
-//
-//
-//                    ActivityOptions options = null;
-//
-//                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-//                        options = ActivityOptions.makeSceneTransitionAnimation(ArticleListActivity.this,dynamicHeightNetworkImageView,"shared_element");
-//                    }
-//
-//                    startActivity(new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))),options.toBundle());
-
-                    /******************************************************************************************************************/
 
                     startActivity(new Intent(Intent.ACTION_VIEW, ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))));
                     overridePendingTransition( R.anim.nextactivity, R.anim.nextactivityback );

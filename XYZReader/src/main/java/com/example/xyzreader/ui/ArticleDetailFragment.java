@@ -8,26 +8,20 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.GregorianCalendar;
+
 
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.graphics.Palette;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.text.Spanned;
-import android.text.format.DateUtils;
-import android.text.method.LinkMovementMethod;
-import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,24 +36,19 @@ import com.android.volley.toolbox.ImageLoader;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 
-/**
- * A fragment representing a single Article detail screen. This fragment is
- * either contained in a {@link ArticleListActivity} in two-pane mode (on
- * tablets) or a {@link ArticleDetailActivity} on handsets.
- */
+
 public class ArticleDetailFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "ArticleDetailFragment";
 
     public static final String ARG_ITEM_ID = "item_id";
-    private static final float PARALLAX_FACTOR = 1.25f;
 
     private Cursor mCursor;
     private long mItemId;
     private View mRootView;
     private int mMutedColor = 0xFF333333;
-//    private ObservableScrollView mScrollView;
-    private DrawInsetsFrameLayout mDrawInsetsFrameLayout;
+
+
     private ColorDrawable mStatusBarColorDrawable;
 
     private int mTopInset;
@@ -70,10 +59,6 @@ public class ArticleDetailFragment extends Fragment implements
     private int mStatusBarFullOpacityBottom;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss");
-    // Use default locale format
-    private SimpleDateFormat outputFormat = new SimpleDateFormat();
-    // Most time functions can only handle 1902 - 2037
-    private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2,1,1);
 
     CollapsingToolbarLayout collapsingToolbar;
 
@@ -119,10 +104,6 @@ public class ArticleDetailFragment extends Fragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // In support library r8, calling initLoader for a fragment in a FragmentPagerAdapter in
-        // the fragment's onCreate may cause the same LoaderManager to be dealt to multiple
-        // fragments because their mIndex is -1 (haven't been added to the activity yet). Thus,
-        // we do this in onActivityCreated.
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -204,7 +185,6 @@ public class ArticleDetailFragment extends Fragment implements
                     (int) (Color.blue(mMutedColor) * 0.9));
         }
         mStatusBarColorDrawable.setColor(color);
-//        mDrawInsetsFrameLayout.setInsetBackground(mStatusBarColorDrawable);
     }
 
     static float progress(float v, float min, float max) {
@@ -237,9 +217,6 @@ public class ArticleDetailFragment extends Fragment implements
             return;
         }
 
-        TextView titleView = (TextView) mRootView.findViewById(R.id.article_title);
-//        TextView bylineView = (TextView) mRootView.findViewById(R.id.article_byline);
-//        bylineView.setMovementMethod(new LinkMovementMethod());
         bodyView = (TextView) mRootView.findViewById(R.id.article_body);
 
 
@@ -249,9 +226,7 @@ public class ArticleDetailFragment extends Fragment implements
             mRootView.setAlpha(0);
             mRootView.setVisibility(View.VISIBLE);
             mRootView.animate().alpha(1);
-//            titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
 
-//            toolbar.setTitle("DONE "+mCursor.getString(ArticleLoader.Query.TITLE));
             collapsingToolbar.setTitle(mCursor.getString(ArticleLoader.Query.TITLE));
 
 
@@ -260,33 +235,6 @@ public class ArticleDetailFragment extends Fragment implements
                 collapsingToolbar.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
 
             }
-
-            Date publishedDate = parsePublishedDate();
-
-            if (!publishedDate.before(START_OF_EPOCH.getTime())) {
-//                bylineView.setText(Html.fromHtml(
-//                        DateUtils.getRelativeTimeSpanString(
-//                                publishedDate.getTime(),
-//                                System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
-//                                DateUtils.FORMAT_ABBREV_ALL).toString()
-//                                + mCursor.getString(ArticleLoader.Query.AUTHOR)
-//                                + "</font>"));
-
-            } else {
-                // If date is before 1902, just show the string
-//                bylineView.setText(Html.fromHtml(
-//                        outputFormat.format(publishedDate) + " "
-//                        + mCursor.getString(ArticleLoader.Query.AUTHOR)
-//                                + "</font>"));
-
-            }
-
-
-//            String text = mCursor.getString(ArticleLoader.Query.BODY);
-//            text = text.trim().replaceAll("\\s{3,}", " ");
-//
-//            bodyView.setText(text);
-
 
             bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
 
@@ -311,11 +259,6 @@ public class ArticleDetailFragment extends Fragment implements
 
             progressBar.setVisibility(View.GONE);
 
-        } else {
-//            mRootView.setVisibility(View.GONE);
-//            titleView.setText("N/A");
-//            bylineView.setText("N/A" );
-//            bodyView.setText("N/A");
         }
     }
 
@@ -345,8 +288,7 @@ public class ArticleDetailFragment extends Fragment implements
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
-//        mCursor = null;
-//        bindViews();
+
     }
 
     public int getUpButtonFloor() {
@@ -360,14 +302,5 @@ public class ArticleDetailFragment extends Fragment implements
                 : mPhotoView.getHeight() - mScrollY;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
 
-//        text = bodyView.getText();
-//
-//        outState.putCharSequence("text",text);
-//        outState.putParcelable("bitmap",bitmap);
-
-    }
 }
