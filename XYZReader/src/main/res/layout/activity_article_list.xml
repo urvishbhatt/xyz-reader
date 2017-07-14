@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/recyleviewappbar"
         android:elevation="4dp"
-        style="@style/AppBarPrimaryColor"
+        android:background="?colorPrimary"
         android:fitsSystemWindows="true"
         android:gravity="center"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
