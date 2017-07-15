@@ -7,7 +7,7 @@
 
 
     <dimen name="fab_elevation">6dp</dimen>
-    <dimen name="fab_press_translation_z">12dp</dimen>
+    <dimen name="fab_press_translation_z">6dp</dimen>
     <dimen name="fab_margin">24dp</dimen>
 
     <dimen name="recyleviewappbar">90dp</dimen>

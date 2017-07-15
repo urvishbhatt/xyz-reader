@@ -26,6 +26,7 @@
                 android:valueType="floatType" />
         </set>
     </item>
+
     <item>
         <set>
             <objectAnimator
