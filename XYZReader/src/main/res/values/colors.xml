@@ -21,6 +21,7 @@
 
     <color name="colorPrimary">@android:color/holo_orange_light</color>
     <color name="colorPrimaryDark">@android:color/holo_orange_dark</color>
+    <color name="colorAccent">#8AC24A</color>
     <color name="theme_accent">#8AC24A</color>
     <color name="ltgray">#ffe0e0e0</color>
 

@@ -22,6 +22,7 @@
 
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@android:color/holo_orange_dark</item>
+        <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:background">@android:color/transparent</item>
 
@@ -34,7 +35,6 @@
 
     <style name="CollapsedAppBar" parent="@android:style/TextAppearance">
         <item name="android:textSize">22sp</item>
-
     </style>
 
 
