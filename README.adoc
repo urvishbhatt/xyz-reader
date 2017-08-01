@@ -5,14 +5,9 @@ XYZ Reader project is part of Udacity's Android Nanodegree.
 app is all about use of material design.
 
 
-![unnamed-1](https://user-images.githubusercontent.com/19701880/28811973-10450676-76b0-11e7-872e-71aa37a01df6.png)
-
-![unnamed 2](https://user-images.githubusercontent.com/19701880/28811969-1043b730-76b0-11e7-9350-1870df09d1a9.png)
-
-![unnamed 3](https://user-images.githubusercontent.com/19701880/28811972-10446a7c-76b0-11e7-8f61-c3fa3d882be4.png)
-
-![unnamed 4](https://user-images.githubusercontent.com/19701880/28811970-1043e5de-76b0-11e7-8fe2-62edbd69626f.png)
-
-![unnamed 5](https://user-images.githubusercontent.com/19701880/28811971-10447f62-76b0-11e7-81a3-c41c4fd759ec.png)
-
-![unnamed 6](https://user-images.githubusercontent.com/19701880/28811974-1046b7e6-76b0-11e7-9e79-d3102e6707cb.png)
+![image1](https://user-images.githubusercontent.com/19701880/28812247-73826566-76b1-11e7-88f6-6a942d99305a.png)
+![image2](https://user-images.githubusercontent.com/19701880/28812248-7385e01a-76b1-11e7-9991-f4afbac03491.png)
+![image3](https://user-images.githubusercontent.com/19701880/28812259-797a4c40-76b1-11e7-89a7-3b8547f8f1b9.png)
+![image4](https://user-images.githubusercontent.com/19701880/28812249-73c4c60e-76b1-11e7-80ae-2d75bad7cec4.png)
+![image5](https://user-images.githubusercontent.com/19701880/28812250-73ce08e0-76b1-11e7-8297-2d8e72e2a153.png)
+![image6](https://user-images.githubusercontent.com/19701880/28812251-73f6cdd4-76b1-11e7-82f1-ac54462f53c8.png)
